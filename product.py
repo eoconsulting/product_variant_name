@@ -67,3 +67,10 @@ class product_product(osv.osv):
                           }
                 result.append(_name_get(mydict))
         return result
+
+    def write(self, cr, uid, ids, vals, context=None):
+        if 'name' in vals:
+            for product in self.browse(cr, uid, ids, context=context):
+                if not product.product_tmpl_id.is_multi_variants:
+                    self.pool.get('product.template').write(cr, uid, [product.product_tmpl_id.id], {'name': vals['name']}, context=context)
+        return super(product_product, self).write(cr, uid, ids, vals, context=context)

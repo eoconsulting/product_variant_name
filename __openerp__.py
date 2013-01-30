@@ -31,11 +31,13 @@
     else use name + variants.
     Without this module, when product have variants, the variant description
     is added twice.
+    Also when a product without variants is renamed, than the product template
+    is renamed too.
     """,
     'category': 'Sales Management',
     'author': 'Enterprise Objects Consulting',
     'website': 'http://www.eoconsulting.com.ar',
-    'depends': ['product'],
+    'depends': ['product', 'product_variant_multi'],
     'init_xml': [],
     'update_xml': [],
     'demo_xml': [],
