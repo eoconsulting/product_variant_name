@@ -24,15 +24,15 @@
 
 {
     'name': 'Product Variant Name',
-    'version': '1.0',
+    'version': '1.1',
     'description': """
     This module change how the product name is computed in a order line.
     If the product have variants description, use name_template + variants,
     else use name + variants.
     Without this module, when product have variants, the variant description
     is added twice.
-    Also when a product without variants is renamed, than the product template
-    is renamed too.
+    Also when a product without variants is created or renamed, than the
+    product template is renamed too.
     """,
     'category': 'Sales Management',
     'author': 'Enterprise Objects Consulting',

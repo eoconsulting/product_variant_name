@@ -74,3 +74,10 @@ class product_product(osv.osv):
                 if not product.product_tmpl_id.is_multi_variants:
                     self.pool.get('product.template').write(cr, uid, [product.product_tmpl_id.id], {'name': vals['name']}, context=context)
         return super(product_product, self).write(cr, uid, ids, vals, context=context)
+
+    def create(self, cr, uid, vals, context=None):
+        product_id = super(product_product, self).create(cr, uid, vals, context=context)
+        if 'name' in vals and not vals.get('is_multi_variants', False):
+            product = self.browse(cr,uid,product_id,context=context)
+            self.pool.get('product.template').write(cr, uid, [product.product_tmpl_id.id], {'name': vals['name']}, context=context)
+        return product_id

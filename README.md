@@ -14,8 +14,8 @@ else use:
 Without this module, when product have variants, the variant description
 is added twice to the name.
 
-Also when a product without variants is renamed, than the product template
-is renamed too.
+Also when a product without variants is created or renamed, than the
+product template is renamed too.
 
 This sources are available in https://github.com/eoconsulting/product_variant_name
 
