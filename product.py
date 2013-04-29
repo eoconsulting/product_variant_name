@@ -27,9 +27,7 @@ class product_product(osv.osv):
     _name = 'product.product'
     _inherit = 'product.product'
 
-    def name_get(self, cr, user, ids, context=None):
-        if context is None:
-            context = {}
+    def name_get(self, cr, user, ids, context={}):
         if not len(ids):
             return []
         def _name_get(d):
@@ -58,7 +56,7 @@ class product_product(osv.osv):
             else:
                 name = product.name
                 if product.variants:
-                    name = product.name_template
+                    name = product.product_tmpl_id.name
                 mydict = {
                           'id': product.id,
                           'name': name,
@@ -67,6 +65,23 @@ class product_product(osv.osv):
                           }
                 result.append(_name_get(mydict))
         return result
+
+    def _product_partner_ref(self, cr, uid, ids, name, arg, context={}):
+        res = {}
+        for p in self.browse(cr, uid, ids, context=context):
+            data = self._get_partner_code_name(cr, uid, [], p, context.get('partner_id', None), context=context)
+            if not data['variants']:
+                data['variants'] = p.variants
+            if not data['code']:
+                data['code'] = p.code
+            if data['variants']:
+                data['name'] = p.product_tmpl_id.name
+            else:
+                if not data['name']:
+                    data['name'] = p.name
+            res[p.id] = (data['code'] and ('['+data['code']+'] ') or '') + \
+                    (data['name'] or '') + (data['variants'] and (' - '+data['variants']) or '')
+        return res
 
     def write(self, cr, uid, ids, vals, context=None):
         if 'name' in vals:
@@ -81,3 +96,7 @@ class product_product(osv.osv):
             product = self.browse(cr,uid,product_id,context=context)
             self.pool.get('product.template').write(cr, uid, [product.product_tmpl_id.id], {'name': vals['name']}, context=context)
         return product_id
+
+    _columns = {
+        'partner_ref' : fields.function(_product_partner_ref, type='char', string='Customer ref'),
+    }
